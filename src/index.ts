@@ -38,7 +38,7 @@ function buildI18nextInitScript({
 }: {
   backendType?: "http" | "fs";
   basePath: string;
-  options: AstroReactI18nextOptions;
+  options?: AstroReactI18nextOptions;
 }) {
   const mergedOptions: MergedAstroReactI18nextOptions = {
     ...DEFAULT_OPTIONS,
@@ -102,7 +102,7 @@ function buildI18nextInitScript({
 }
 
 export default function AstroReactI18nextIntegration(
-  options: AstroReactI18nextOptions,
+  options?: AstroReactI18nextOptions,
 ): AstroIntegration {
   // merge the user-provided options with the default options
   const mergedOptions: MergedAstroReactI18nextOptions = {
