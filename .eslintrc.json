@@ -1,0 +1,81 @@
+{
+  // Core environment settings
+  "env": {
+    "browser": true,
+    "node": true
+  },
+
+  // Extending recommended rule sets from various plugins
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:astro/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier"
+  ],
+
+  // Ignore build files
+  "ignorePatterns": ["dist/"],
+
+  // Specific parser and plugins
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import"],
+  "root": true,
+
+  // Override settings for .astro files
+  "overrides": [
+    {
+      "files": ["*.astro"],
+      "parser": "astro-eslint-parser",
+      "parserOptions": {
+        "extraFileExtensions": [".astro"],
+        "parser": "@typescript-eslint/parser"
+      },
+      "rules": {
+        "react/no-unknown-property": [
+          "error",
+          {
+            "ignore": ["class"]
+          }
+        ]
+      }
+    }
+  ],
+
+  // Custom rules to enforce code style and conventions
+  "rules": {
+    // Import-related rules
+    "import/newline-after-import": [
+      "error",
+      {
+        "considerComments": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        }
+      }
+    ],
+
+    // React-related rules
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "shorthandFirst": true
+      }
+    ]
+  },
+
+  // Settings for specific tools and plugins
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "astro-react-i18next",
+  "version": "0.0.1",
+  "description": "Integrates i18next and react-i18next seamlessly into your Astro website to provide robust i18n support for React components.",
+  "keywords": [
+    "astro-integration",
+    "withastro"
+  ],
+  "author": "jeremyxgo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeremyxgo/astro-react-i18next.git"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./middleware/server": "./dist/middleware-server.js",
+    "./middleware/static": "./dist/middleware-static.js",
+    "./utils": "./dist/utils.js"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,mjs,astro,json,md}\"",
+    "lint": "eslint --fix --max-warnings 0 \"**/*.{js,jsx,ts,tsx,mjs,astro}\"",
+    "build": "node ./build.js && tsc",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "i18next": "^23.15.1",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-fs-backend": "^2.3.2",
+    "i18next-http-backend": "^2.6.1",
+    "react-i18next": "^15.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "astro": "^4.15.9",
+    "astro-eslint-parser": "^1.0.3",
+    "esbuild": "^0.24.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-astro": "^1.2.4",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-react": "^7.37.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": "^18.17.1 || ^20.3.0 || >=21.0.0"
+  }
+}
