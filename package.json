@@ -1,6 +1,6 @@
 {
   "name": "astro-react-i18next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Integrates i18next and react-i18next seamlessly into your Astro website to provide robust i18n support for React components.",
   "keywords": [
     "astro-integration",
