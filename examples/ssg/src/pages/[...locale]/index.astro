@@ -1,0 +1,28 @@
+---
+import { buildStaticPaths } from "astro-react-i18next/utils";
+import i18n from "i18next";
+import { Hello } from "../../components/Hello";
+
+export function getStaticPaths() {
+  return buildStaticPaths();
+}
+---
+
+<html lang={i18n.language}>
+  <head>
+    <meta charset="utf-8" />
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <meta content="width=device-width" name="viewport" />
+    <meta content={Astro.generator} name="generator" />
+    <title>astro-react-i18next</title>
+  </head>
+  <body>
+    <div style="display: flex; gap: 10px;">
+      <a href="/">en-US</a>
+      <a href="/fr-FR">fr-FR</a>
+      <a href="/zh-TW">zh-TW</a>
+    </div>
+    <p>{i18n.t("hello_world")}</p>
+    <Hello />
+  </body>
+</html>

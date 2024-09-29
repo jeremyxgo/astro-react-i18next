@@ -2,6 +2,16 @@
 
 Integrates i18next and react-i18next seamlessly into your Astro website to provide robust i18n support for React components.
 
+[![npm version](https://img.shields.io/npm/v/astro-react-i18next?style=flat-square)](https://www.npmjs.com/package/astro-react-i18next)
+![GitHub License](https://img.shields.io/github/license/jeremyxgo/astro-react-i18next?style=flat-square)
+
+## Examples
+
+| Example                                                                        |                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [SSG](https://github.com/jeremyxgo/astro-react-i18next/tree/main/examples/ssg) | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/github/jeremyxgo/astro-react-i18next/tree/main/examples/ssg?startScript=dev) |
+| [SSR](https://github.com/jeremyxgo/astro-react-i18next/tree/main/examples/ssr) | [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/github/jeremyxgo/astro-react-i18next/tree/main/examples/ssr?startScript=dev) |
+
 ## Installation
 
 ```bash
@@ -108,7 +118,7 @@ The content of the `locales/en-US/common.json` file should look like this:
 
 ```json
 {
-  "hello_world": "Hello World!"
+  "hello_world": "Hello, World!"
 }
 ```
 
@@ -128,7 +138,7 @@ To manage dynamic routes for each locale, create a root route named `[...locale]
 
 ## Static Paths for Locales
 
-To generate static paths for each locale in `Static (SSG) Mode`, use the `getStaticPaths` function in your Astro page file.
+If you're using `Static (SSG) Mode`, static paths are required. You can easily generate them by using the `buildStaticPaths` utility function provided by this integration.
 
 ```js
 ---
@@ -146,15 +156,15 @@ export function getStaticPaths() {
 
 ## Translating Content in Astro Components
 
-Use the i18next instance to translate content in your Astro components.
+Use the `i18next` instance to translate content in your Astro components.
 
 ```js
 ---
-import i18next from "i18next";
+import i18n from "i18next";
 ---
 
-<html lang={i18next.language}>
-  <p>{i18next.t("common:hello_world")}</p>
+<html lang={i18n.language}>
+  <p>{i18n.t("hello_world")}</p>
 </html>
 ```
 
@@ -167,7 +177,7 @@ import { useTranslation } from "react-i18next";
 
 export function MyComponent() {
   const { t } = useTranslation();
-  return <p>{t("common:hello_world")}</p>;
+  return <p>{t("hello_world")}</p>;
 }
 ```
 
