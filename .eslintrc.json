@@ -5,77 +5,77 @@
     "node": true
   },
 
-  // Extending recommended rule sets from various plugins
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:astro/recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "prettier"
-  ],
-
-  // Ignore build files
-  "ignorePatterns": ["dist/"],
-
-  // Specific parser and plugins
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
+  // Set root to true to ensure this config is the base
   "root": true,
 
-  // Override settings for .astro files
+  // Base configurations and recommended rule sets
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+
+  // Plugins to use
+  "plugins": ["@typescript-eslint", "import"],
+
+  // Override settings for specific file types
   "overrides": [
     {
+      // Specific settings for .astro files
       "files": ["*.astro"],
+      "extends": ["plugin:astro/recommended"],
       "parser": "astro-eslint-parser",
       "parserOptions": {
         "extraFileExtensions": [".astro"],
         "parser": "@typescript-eslint/parser"
-      },
+      }
+    },
+    {
+      // Specific settings for JavaScript and TypeScript files, including React components
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx", "*.mjs"],
+      "extends": ["plugin:react/recommended", "plugin:react/jsx-runtime"],
+      "parser": "@typescript-eslint/parser",
       "rules": {
-        "react/no-unknown-property": [
+        // Ensure that React props are sorted
+        "react/jsx-sort-props": [
           "error",
           {
-            "ignore": ["class"]
+            "callbacksLast": true,
+            "shorthandFirst": true
+          }
+        ]
+      }
+    },
+    {
+      // Shared settings for multiple file types
+      "files": ["*.astro", "*.js", "*.jsx", "*.ts", "*.tsx", "*.mjs"],
+      "extends": ["prettier"],
+      "rules": {
+        // Ensure newline after imports
+        "import/newline-after-import": [
+          "error",
+          {
+            "considerComments": true
+          }
+        ],
+        // Ensure imports are sorted
+        "import/order": [
+          "error",
+          {
+            "alphabetize": {
+              "caseInsensitive": true,
+              "order": "asc"
+            }
           }
         ]
       }
     }
   ],
 
-  // Custom rules to enforce code style and conventions
-  "rules": {
-    // Import-related rules
-    "import/newline-after-import": [
-      "error",
-      {
-        "considerComments": true
-      }
-    ],
-    "import/order": [
-      "error",
-      {
-        "alphabetize": {
-          "caseInsensitive": true,
-          "order": "asc"
-        }
-      }
-    ],
-
-    // React-related rules
-    "react/jsx-sort-props": [
-      "error",
-      {
-        "callbacksLast": true,
-        "shorthandFirst": true
-      }
-    ]
-  },
-
-  // Settings for specific tools and plugins
+  // Additional settings for specific tools and plugins
   "settings": {
+    // Auto-detect the React version
     "react": {
       "version": "detect"
     }
-  }
+  },
+
+  // Ignore specific directories or files
+  "ignorePatterns": ["dist/"]
 }
