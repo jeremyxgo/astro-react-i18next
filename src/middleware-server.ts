@@ -21,12 +21,12 @@ export async function onRequest(context: APIContext, next: MiddlewareNext) {
   context.cookies.set("i18next", nextLocale || "", { path: "/" });
 
   // get the localized pathname for the new locale
-  const { hash, origin, pathname, search } = context.url;
+  const { hash, pathname, search } = context.url;
   const nextPathname = getLocalizedPathname(pathname, nextLocale);
 
   // redirect to the new url if the pathname has changed
   if (nextPathname !== pathname) {
-    const nextUrl = origin + nextPathname + search + hash;
+    const nextUrl = nextPathname + search + hash;
     return context.redirect(nextUrl);
   }
 
