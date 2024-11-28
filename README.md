@@ -124,15 +124,17 @@ The content of the `locales/en-US/common.json` file should look like this:
 
 ## Dynamic Routes for Locales
 
-To manage dynamic routes for each locale, create a root route named `[...locale]` in the `src` directory.
+To manage dynamic routes for each locale, create a root route named `[...locale]` in the `pages` directory.
 
 ```text
 /
 ├── public/
 ├── src/
-│   └── [...locale]/
-│       ├── ...
-│       └── index.jsx
+│   └── pages/
+│       └── [...locale]/
+│           ├── index.astro
+│           ├── page-a.astro
+│           └── page-b.astro
 └── package.json
 ```
 
