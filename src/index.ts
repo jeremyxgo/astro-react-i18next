@@ -53,7 +53,7 @@ function buildI18nextInitScript({
       import Backend from "i18next-fs-backend";
     `;
     i18nextOptions = `
-      initImmediate: false,
+      initAsync: false,
     `;
   }
 
