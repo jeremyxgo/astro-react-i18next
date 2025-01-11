@@ -1,9 +1,9 @@
 import i18n from "i18next";
 
 export function getLocaleConfig() {
-  const { defaultLocale, locales, prefixDefaultLocale } =
+  const { defaultLocale, locales, prefixDefaultLocale, domains } =
     i18n.options.astroReactI18next;
-  return { defaultLocale, locales, prefixDefaultLocale };
+  return { defaultLocale, locales, prefixDefaultLocale, domains };
 }
 
 export function getLocalizedPathname(pathname = "", locale = "") {

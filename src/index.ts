@@ -10,6 +10,7 @@ const DEFAULT_OPTIONS = {
   namespaces: ["common"],
   prefixDefaultLocale: false,
   localesDir: "locales",
+  domains: [],
 };
 
 interface AstroReactI18nextOptions {
@@ -19,6 +20,7 @@ interface AstroReactI18nextOptions {
   namespaces?: string[];
   prefixDefaultLocale?: boolean;
   localesDir?: string;
+  domains?: { domain: string; defaultLocale: string }[];
 }
 
 type MergedAstroReactI18nextOptions = {
@@ -120,6 +122,8 @@ export default function AstroReactI18nextIntegration(
         injectScript,
         updateConfig,
       }) => {
+        const isDomainMode = mergedOptions.domains.length > 0;
+
         const clientLocaleRestorationScript = `
           window.addEventListener("DOMContentLoaded", () => {
             const defaultLocale = "${mergedOptions.defaultLocale}";
@@ -158,9 +162,13 @@ export default function AstroReactI18nextIntegration(
 
         injectScript("page-ssr", serverI18nextInitScript);
         injectScript("before-hydration", clientI18nextInitScript);
-        injectScript("before-hydration", clientLocaleRestorationScript);
+        if (!isDomainMode) {
+          injectScript("before-hydration", clientLocaleRestorationScript);
+        }
         injectScript("page", clientI18nextInitScript);
-        injectScript("page", clientLocaleRestorationScript);
+        if (!isDomainMode) {
+          injectScript("page", clientLocaleRestorationScript);
+        }
 
         updateConfig({
           i18n: {
