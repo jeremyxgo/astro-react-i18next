@@ -47,6 +47,7 @@ The initialization function accepts an optional configuration object with the fo
 | `namespaces`          | `string[]` | An array of namespaces to support.                                                 | `["common"]` |
 | `prefixDefaultLocale` | `boolean`  | Whether to prefix the default locale with the locale code.                         | `false`      |
 | `localesDir`          | `string`   | The directory where the locale files are stored, relative to the public directory. | `"locales"`  |
+| `domains`             | `string[]` | An array of domains for language selection.                                        | `[]`         |
 
 Here is an example of how to configure the integration:
 
@@ -195,6 +196,27 @@ All utility functions are available in the `astro-react-i18next/utils` module.
 | `getLocalizedPathname(pathname = "", locale = "")` | Returns the localized pathname for the specified locale. | string                                                                       |
 | `buildStaticPaths()`                               | Generates static paths for each locale.                  | `{ params: { locale: string \| undefined; }; }[]`                            |
 | `changeLocale(nextLocale = "", shallow = true)`    | Changes the current locale.                              |                                                                              |
+
+## Developing locally
+
+Clone the repository:
+
+```bash
+git clone https://github.com/jeremyxgo/astro-react-i18next.git
+cd astro-react-i18next.git
+```
+
+Build the package:
+
+```bash
+npm run build
+```
+
+Install the package in your project:
+
+```bash
+npm install $(npm pack /.../astro-react-i18next | tail -1)
+```
 
 ## License
 

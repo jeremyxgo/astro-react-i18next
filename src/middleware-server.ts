@@ -3,13 +3,19 @@ import i18n from "i18next";
 import { getLocaleConfig, getLocalizedPathname } from "./utils.js";
 
 export async function onRequest(context: APIContext, next: MiddlewareNext) {
-  const { defaultLocale, locales } = getLocaleConfig();
+  const { defaultLocale, locales, domains } = getLocaleConfig();
+  const host: string | null = context.request.headers.get("host");
 
-  // detect the locale from the pathname, cookie, or header
+  // detect the locale from the host, pathname, cookie, or header
+  const localeFromDomain = domains.find(
+    (domain: { domain: string; defaultLocale: string }) =>
+      host === domain.domain,
+  )?.defaultLocale;
   const localeFromPathname = context.url.pathname.split("/")[1];
   const localeFromCookie = context.cookies.get("i18next")?.value;
   const localeFromHeader = context.preferredLocale;
   const nextLocale = [
+    localeFromDomain,
     localeFromPathname,
     localeFromCookie,
     localeFromHeader,
@@ -25,7 +31,8 @@ export async function onRequest(context: APIContext, next: MiddlewareNext) {
   const nextPathname = getLocalizedPathname(pathname, nextLocale);
 
   // redirect to the new url if the pathname has changed
-  if (nextPathname !== pathname) {
+  const isDomainMode = domains.length > 0;
+  if (nextPathname !== pathname && !isDomainMode) {
     const nextUrl = nextPathname + search + hash;
     return context.redirect(nextUrl);
   }
