@@ -20,7 +20,10 @@ interface AstroReactI18nextOptions {
   namespaces?: string[];
   prefixDefaultLocale?: boolean;
   localesDir?: string;
-  domains?: { domain: string; defaultLocale: string }[];
+  domains?: {
+    domain: string;
+    defaultLocale: string;
+  }[];
 }
 
 type MergedAstroReactI18nextOptions = {
@@ -36,16 +39,12 @@ declare module "i18next" {
 function buildI18nextInitScript({
   backendType,
   basePath,
-  options,
+  mergedOptions,
 }: {
-  backendType?: "http" | "fs";
+  backendType: "http" | "fs";
   basePath: string;
-  options?: AstroReactI18nextOptions;
+  mergedOptions: AstroReactI18nextOptions;
 }) {
-  const mergedOptions: MergedAstroReactI18nextOptions = {
-    ...DEFAULT_OPTIONS,
-    ...options,
-  };
   let imports = "";
   let i18nextPlugins = "";
   let i18nextOptions = "";
@@ -95,11 +94,29 @@ function buildI18nextInitScript({
           escapeValue: false,
         },
         backend: {
-          loadPath: "${path.join(basePath, mergedOptions.localesDir)}/{{lng}}/{{ns}}.json",
+          loadPath: "${path.join(basePath, mergedOptions.localesDir || "")}/{{lng}}/{{ns}}.json",
         },
         astroReactI18next: ${JSON.stringify(mergedOptions)},
         ${i18nextOptions}
       });
+  `;
+}
+
+function buildLocaleRestorationScript(
+  mergedOptions: MergedAstroReactI18nextOptions,
+) {
+  return `
+    window.addEventListener("DOMContentLoaded", () => {
+      const defaultLocale = "${mergedOptions.defaultLocale}";
+      const locales = ${JSON.stringify(mergedOptions.locales)};
+      let detectedLocale = window.location.pathname.split("/")[1];
+
+      if (!locales.includes(detectedLocale)) {
+        detectedLocale = defaultLocale;
+      }
+
+      i18n.changeLanguage(detectedLocale);
+    });
   `;
 }
 
@@ -122,38 +139,25 @@ export default function AstroReactI18nextIntegration(
         injectScript,
         updateConfig,
       }) => {
-        const isDomainMode = mergedOptions.domains.length > 0;
-
-        const clientLocaleRestorationScript = `
-          window.addEventListener("DOMContentLoaded", () => {
-            const defaultLocale = "${mergedOptions.defaultLocale}";
-            const locales = ${JSON.stringify(mergedOptions.locales)};
-            let detectedLocale = window.location.pathname.split("/")[1];
-
-            if (!locales.includes(detectedLocale)) {
-              detectedLocale = defaultLocale;
-            }
-
-            i18n.changeLanguage(detectedLocale);
-          });
-        `;
+        const middlewareEntrypoint =
+          config.output === "server"
+            ? `${INTEGRATION_NAME}/middleware/server`
+            : `${INTEGRATION_NAME}/middleware/static`;
 
         const clientI18nextInitScript = buildI18nextInitScript({
           backendType: "http",
           basePath: "/",
-          options,
+          mergedOptions,
         });
 
         const serverI18nextInitScript = buildI18nextInitScript({
           backendType: "fs",
           basePath: config.publicDir.pathname,
-          options,
+          mergedOptions,
         });
 
-        const middlewareEntrypoint =
-          config.output === "server"
-            ? `${INTEGRATION_NAME}/middleware/server`
-            : `${INTEGRATION_NAME}/middleware/static`;
+        const localeRestorationScript =
+          buildLocaleRestorationScript(mergedOptions);
 
         addMiddleware({
           entrypoint: middlewareEntrypoint,
@@ -161,13 +165,13 @@ export default function AstroReactI18nextIntegration(
         });
 
         injectScript("page-ssr", serverI18nextInitScript);
+
         injectScript("before-hydration", clientI18nextInitScript);
-        if (!isDomainMode) {
-          injectScript("before-hydration", clientLocaleRestorationScript);
-        }
         injectScript("page", clientI18nextInitScript);
-        if (!isDomainMode) {
-          injectScript("page", clientLocaleRestorationScript);
+
+        if (mergedOptions.domains.length === 0) {
+          injectScript("before-hydration", localeRestorationScript);
+          injectScript("page", localeRestorationScript);
         }
 
         updateConfig({

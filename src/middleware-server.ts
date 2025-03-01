@@ -4,13 +4,13 @@ import { getLocaleConfig, getLocalizedPathname } from "./utils.js";
 
 export async function onRequest(context: APIContext, next: MiddlewareNext) {
   const { defaultLocale, locales, domains } = getLocaleConfig();
-  const host: string | null = context.request.headers.get("host");
+
+  const localesByDomain = Object.fromEntries(
+    domains.map((domain) => [domain.domain, domain.defaultLocale]),
+  );
 
   // detect the locale from the host, pathname, cookie, or header
-  const localeFromDomain = domains.find(
-    (domain: { domain: string; defaultLocale: string }) =>
-      host === domain.domain,
-  )?.defaultLocale;
+  const localeFromDomain = localesByDomain[context.url.host];
   const localeFromPathname = context.url.pathname.split("/")[1];
   const localeFromCookie = context.cookies.get("i18next")?.value;
   const localeFromHeader = context.preferredLocale;
@@ -31,8 +31,7 @@ export async function onRequest(context: APIContext, next: MiddlewareNext) {
   const nextPathname = getLocalizedPathname(pathname, nextLocale);
 
   // redirect to the new url if the pathname has changed
-  const isDomainMode = domains.length > 0;
-  if (nextPathname !== pathname && !isDomainMode) {
+  if (nextPathname !== pathname && domains.length === 0) {
     const nextUrl = nextPathname + search + hash;
     return context.redirect(nextUrl);
   }
