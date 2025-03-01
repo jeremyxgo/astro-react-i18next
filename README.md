@@ -39,15 +39,15 @@ export default defineConfig({
 
 The initialization function accepts an optional configuration object with the following options:
 
-| Option                | Type       | Description                                                                        | Default      |
-| --------------------- | ---------- | ---------------------------------------------------------------------------------- | ------------ |
-| `defaultLocale`       | `string`   | The default locale to use when no locale is specified.                             | `"en-US"`    |
-| `locales`             | `string[]` | An array of locales to support.                                                    | `["en-US"]`  |
-| `defaultNamespace`    | `string`   | The default namespace to use when no namespace is specified.                       | `"common"`   |
-| `namespaces`          | `string[]` | An array of namespaces to support.                                                 | `["common"]` |
-| `prefixDefaultLocale` | `boolean`  | Whether to prefix the default locale with the locale code.                         | `false`      |
-| `localesDir`          | `string`   | The directory where the locale files are stored, relative to the public directory. | `"locales"`  |
-| `domains`             | `string[]` | An array of domains for language selection.                                        | `[]`         |
+| Option                | Type                                           | Description                                                                        | Default      |
+| --------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- | ------------ |
+| `defaultLocale`       | `string`                                       | The default locale to use when no locale is specified.                             | `"en-US"`    |
+| `locales`             | `string[]`                                     | An array of locales to support.                                                    | `["en-US"]`  |
+| `defaultNamespace`    | `string`                                       | The default namespace to use when no namespace is specified.                       | `"common"`   |
+| `namespaces`          | `string[]`                                     | An array of namespaces to support.                                                 | `["common"]` |
+| `prefixDefaultLocale` | `boolean`                                      | Whether to prefix the default locale with the locale code.                         | `false`      |
+| `localesDir`          | `string`                                       | The directory where the locale files are stored, relative to the public directory. | `"locales"`  |
+| `domains`             | `{ domain: string; defaultLocale: string; }[]` | An array of domains for language selection.                                        | `[]`         |
 
 Here is an example of how to configure the integration:
 
@@ -190,12 +190,12 @@ The integration provides utility functions to help manage locales and translatio
 
 All utility functions are available in the `astro-react-i18next/utils` module.
 
-| Function                                           | Description                                              | Returns                                                                      |
-| -------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `getLocaleConfig()`                                | Returns the locale configuration object.                 | `{ defaultLocale: string, locales: string[], prefixDefaultLocale: boolean }` |
-| `getLocalizedPathname(pathname = "", locale = "")` | Returns the localized pathname for the specified locale. | string                                                                       |
-| `buildStaticPaths()`                               | Generates static paths for each locale.                  | `{ params: { locale: string \| undefined; }; }[]`                            |
-| `changeLocale(nextLocale = "", shallow = true)`    | Changes the current locale.                              |                                                                              |
+| Function                                           | Description                                              | Returns                                                                                                                              |
+| -------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `getLocaleConfig()`                                | Returns the locale configuration object.                 | `{ defaultLocale: string; locales: string[]; prefixDefaultLocale: boolean; domains: { domain: string; defaultLocale: string; }[]; }` |
+| `getLocalizedPathname(pathname = "", locale = "")` | Returns the localized pathname for the specified locale. | `string`                                                                                                                             |
+| `buildStaticPaths()`                               | Generates static paths for each locale.                  | `{ params: { locale: string \| undefined; }; }[]`                                                                                    |
+| `changeLocale(nextLocale = "", shallow = true)`    | Changes the current locale.                              |                                                                                                                                      |
 
 ## Developing locally
 
@@ -203,7 +203,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/jeremyxgo/astro-react-i18next.git
-cd astro-react-i18next.git
+cd astro-react-i18next
 ```
 
 Build the package:
@@ -215,7 +215,7 @@ npm run build
 Install the package in your project:
 
 ```bash
-npm install $(npm pack /.../astro-react-i18next | tail -1)
+npm install $(npm pack /path/to/astro-react-i18next | tail -1)
 ```
 
 ## License
