@@ -11,6 +11,7 @@ const DEFAULT_OPTIONS = {
   prefixDefaultLocale: false,
   localesDir: "locales",
   domains: [],
+  reservedRoutes: ["/api"],
 };
 
 interface AstroReactI18nextOptions {
@@ -24,6 +25,7 @@ interface AstroReactI18nextOptions {
     domain: string;
     defaultLocale: string;
   }[];
+  reservedRoutes?: string[];
 }
 
 type MergedAstroReactI18nextOptions = {
@@ -32,7 +34,14 @@ type MergedAstroReactI18nextOptions = {
 
 declare module "i18next" {
   interface InitOptions {
-    astroReactI18next: MergedAstroReactI18nextOptions;
+    astroReactI18next: Pick<
+      MergedAstroReactI18nextOptions,
+      | "defaultLocale"
+      | "locales"
+      | "prefixDefaultLocale"
+      | "domains"
+      | "reservedRoutes"
+    >;
   }
 }
 
@@ -96,7 +105,13 @@ function buildI18nextInitScript({
         backend: {
           loadPath: "${path.join(basePath, mergedOptions.localesDir || "")}/{{lng}}/{{ns}}.json",
         },
-        astroReactI18next: ${JSON.stringify(mergedOptions)},
+        astroReactI18next: ${JSON.stringify({
+          defaultLocale: mergedOptions.defaultLocale,
+          locales: mergedOptions.locales,
+          prefixDefaultLocale: mergedOptions.prefixDefaultLocale,
+          domains: mergedOptions.domains,
+          reservedRoutes: mergedOptions.reservedRoutes,
+        })},
         ${i18nextOptions}
       });
   `;
@@ -109,7 +124,20 @@ function buildLocaleRestorationScript(
     window.addEventListener("DOMContentLoaded", () => {
       const defaultLocale = "${mergedOptions.defaultLocale}";
       const locales = ${JSON.stringify(mergedOptions.locales)};
-      let detectedLocale = window.location.pathname.split("/")[1];
+      const reservedRoutes = ${JSON.stringify(mergedOptions.reservedRoutes)};
+      const pathname = window.location.pathname;
+
+      if (
+        reservedRoutes.some(
+          (route) =>
+            pathname === route ||
+            pathname.startsWith(route + "/"),
+        )
+      ) {
+        return;
+      }
+
+      let detectedLocale = pathname.split("/")[1];
 
       if (!locales.includes(detectedLocale)) {
         detectedLocale = defaultLocale;

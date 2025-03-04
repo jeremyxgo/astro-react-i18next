@@ -2,8 +2,21 @@ import type { APIContext, MiddlewareNext } from "astro";
 import i18n from "i18next";
 import { getLocaleConfig, getLocalizedPathname } from "./utils.js";
 
+const ASTRO_RESERVED_ROUTES = ["/_astro", "/_actions", "/_server-islands"];
+
 export async function onRequest(context: APIContext, next: MiddlewareNext) {
-  const { defaultLocale, locales, domains } = getLocaleConfig();
+  const { defaultLocale, locales, domains, reservedRoutes } = getLocaleConfig();
+
+  // skip the locale handling for reserved routes
+  if (
+    [...ASTRO_RESERVED_ROUTES, ...reservedRoutes].some(
+      (route) =>
+        context.url.pathname === route ||
+        context.url.pathname.startsWith(route + "/"),
+    )
+  ) {
+    return next();
+  }
 
   const localesByDomain = Object.fromEntries(
     domains.map((domain) => [domain.domain, domain.defaultLocale]),

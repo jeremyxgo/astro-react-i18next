@@ -48,6 +48,7 @@ The initialization function accepts an optional configuration object with the fo
 | `prefixDefaultLocale` | `boolean`                                      | Whether to prefix the default locale with the locale code.                         | `false`      |
 | `localesDir`          | `string`                                       | The directory where the locale files are stored, relative to the public directory. | `"locales"`  |
 | `domains`             | `{ domain: string; defaultLocale: string; }[]` | An array of domains for language selection.                                        | `[]`         |
+| `reservedRoutes`      | `string[]`                                     | An array of routes excluded from locale handling.                                  | `["/api"]`   |
 
 Here is an example of how to configure the integration:
 
@@ -63,8 +64,6 @@ export default defineConfig({
 +   reactI18next({
 +     defaultLocale: "en-US",
 +     locales: ["en-US", "fr-FR", "zh-TW"],
-+     defaultNamespace: "app",
-+     namespaces: ["app"],
 +   }),
   ],
 });
@@ -84,8 +83,6 @@ export default defineConfig({
     reactI18next({
       defaultLocale: "en-US",
       locales: ["en-US", "fr-FR", "zh-TW"],
-      defaultNamespace: "app",
-      namespaces: ["app"],
     }),
   ],
 + output: "server",
@@ -190,12 +187,12 @@ The integration provides utility functions to help manage locales and translatio
 
 All utility functions are available in the `astro-react-i18next/utils` module.
 
-| Function                                           | Description                                              | Returns                                                                                                                              |
-| -------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `getLocaleConfig()`                                | Returns the locale configuration object.                 | `{ defaultLocale: string; locales: string[]; prefixDefaultLocale: boolean; domains: { domain: string; defaultLocale: string; }[]; }` |
-| `getLocalizedPathname(pathname = "", locale = "")` | Returns the localized pathname for the specified locale. | `string`                                                                                                                             |
-| `buildStaticPaths()`                               | Generates static paths for each locale.                  | `{ params: { locale: string \| undefined; }; }[]`                                                                                    |
-| `changeLocale(nextLocale = "", shallow = true)`    | Changes the current locale.                              |                                                                                                                                      |
+| Function                                           | Description                                              | Returns                                                                                                                                                        |
+| -------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getLocaleConfig()`                                | Returns the locale configuration object.                 | `{ defaultLocale: string; locales: string[]; prefixDefaultLocale: boolean; domains: { domain: string; defaultLocale: string; }[]; reservedRoutes: string[]; }` |
+| `getLocalizedPathname(pathname = "", locale = "")` | Returns the localized pathname for the specified locale. | `string`                                                                                                                                                       |
+| `buildStaticPaths()`                               | Generates static paths for each locale.                  | `{ params: { locale: string \| undefined; }; }[]`                                                                                                              |
+| `changeLocale(nextLocale = "", shallow = true)`    | Changes the current locale.                              |                                                                                                                                                                |
 
 ## Developing locally
 
