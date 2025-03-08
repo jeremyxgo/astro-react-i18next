@@ -1,4 +1,0 @@
-{
-  "*.{js,jsx,ts,tsx,mjs,astro,json,md}": "prettier --write",
-  "*.{js,jsx,ts,tsx,mjs,astro}": "eslint --fix --max-warnings 0"
-}
