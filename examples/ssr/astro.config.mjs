@@ -11,10 +11,10 @@ export default defineConfig({
     mode: "standalone",
   }),
   integrations: [
+    react(),
     reactI18next({
       defaultLocale: "en-US",
       locales: ["en-US", "fr-FR", "zh-TW"],
     }),
-    react(),
   ],
 });

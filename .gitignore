@@ -2,6 +2,9 @@
 dist/
 astro-react-i18next*.tgz
 
+# generated types
+.astro/
+
 # dependencies
 node_modules/
 
