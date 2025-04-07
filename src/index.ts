@@ -1,5 +1,5 @@
-import path from "node:path";
 import type { AstroIntegration } from "astro";
+import path from "pathe";
 
 const INTEGRATION_NAME = "astro-react-i18next";
 
@@ -103,7 +103,7 @@ function buildI18nextInitScript({
           escapeValue: false,
         },
         backend: {
-          loadPath: "${path.join(basePath, mergedOptions.localesDir || "")}/{{lng}}/{{ns}}.json",
+          loadPath: "${path.resolve(path.join(basePath, mergedOptions.localesDir || ""))}/{{lng}}/{{ns}}.json",
         },
         astroReactI18next: ${JSON.stringify({
           defaultLocale: mergedOptions.defaultLocale,
