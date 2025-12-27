@@ -24,7 +24,7 @@ You will see the following changes in your `astro.config.mjs` file:
 
 ```diff
 import { defineConfig } from "astro/config";
-import reactI18next from "astro-react-i18next";
++import reactI18next from "astro-react-i18next";
 
 export default defineConfig({
   // ...
